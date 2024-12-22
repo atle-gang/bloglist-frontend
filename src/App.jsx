@@ -24,28 +24,43 @@ const App = () => {
   }, []);
 
   const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-        <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        password
-        <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>
+    <>
+      <h2>Log into application</h2>
+      <form onSubmit={handleLogin}>
+        <div>
+          username
+          <input
+            type="text"
+            value={username}
+            name="Username"
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        </div>
+        <div>
+          password
+          <input
+            type="password"
+            value={password}
+            name="Password"
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </div>
+        <button type="submit">login</button>
+      </form>
+    </>
   );
+
+  const blogList = () => {
+    return (
+      <>
+        <h2>Blogs</h2>
+        <p>{user.name} logged in <button onClick={handleLogout}>log out</button></p>
+        {blogs.map((blog) => (
+          <Blog key={blog.id} blog={blog} />
+        ))}
+      </>
+    );
+  };
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -76,27 +91,7 @@ const App = () => {
     setTimeout(() => setErrorMessage(null), 5000);
   };
 
-  return (
-    <div>
-      {user === null ? (
-        <>
-          <h2>Log into application</h2>
-          <Notification message={errorMessage} />
-          {loginForm()}
-        </>
-      ) : (
-        <>
-          <h2>Blogs</h2>
-          <Notification message={errorMessage} />
-          <p>{user.name} logged in </p>
-          <button onClick={handleLogout}>log out</button>
-          {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
-          ))}
-        </>
-      )}
-    </div>
-  );
+  return <div>{user === null ? loginForm() : blogList()}</div>;
 };
 
 export default App;
