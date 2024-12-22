@@ -8,7 +8,11 @@ const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [author, setAuthor] = useState("");
+  const [title, setTitle] = useState("");
+  const [url, setUrl] = useState("");
   const [user, setUser] = useState(null);
+  const [blog, setBlog] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
@@ -49,12 +53,50 @@ const App = () => {
       </form>
     </>
   );
+  const blogForm = () => (
+    <>
+      {blogList()}
+      <h2>Create new blog</h2>
+      <form onSubmit={handleBlog}>
+        <div>
+          title
+          <input
+            type="text"
+            value={title}
+            name="Title"
+            onChange={({ target }) => setTitle(target.value)}
+          />
+        </div>
+        <div>
+          author
+          <input
+            type="text"
+            value={author}
+            name="Author"
+            onChange={({ target }) => setAuthor(target.value)}
+          />
+        </div>
+        <div>
+          url
+          <input
+            type="text"
+            value={url}
+            name="Url"
+            onChange={({ target }) => setUrl(target.value)}
+          />
+        </div>
+        <button type="submit">create</button>
+      </form>
+    </>
+  );
 
   const blogList = () => {
     return (
       <>
         <h2>Blogs</h2>
-        <p>{user.name} logged in <button onClick={handleLogout}>log out</button></p>
+        <p>
+          {user.name} logged in <button onClick={handleLogout}>log out</button>
+        </p>
         {blogs.map((blog) => (
           <Blog key={blog.id} blog={blog} />
         ))}
@@ -84,6 +126,28 @@ const App = () => {
     }
   };
 
+  const handleBlog = async (event) => {
+    event.preventDefault();
+
+    try {
+      const blog = await loginService.create({
+        title,
+        author,
+        url,
+      });
+
+      setBlog(blog);
+      setTitle("");
+      setAuthor("");
+      setUrl("");
+    } catch (exception) {
+      setErrorMessage("Error adding blog");
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+    }
+  };
+
   const handleLogout = () => {
     setUser(null);
     window.localStorage.removeItem("loggedBlogUser");
@@ -91,7 +155,7 @@ const App = () => {
     setTimeout(() => setErrorMessage(null), 5000);
   };
 
-  return <div>{user === null ? loginForm() : blogList()}</div>;
+  return <div>{user === null ? loginForm() : blogForm()}</div>;
 };
 
 export default App;
