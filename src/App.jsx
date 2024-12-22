@@ -58,27 +58,24 @@ const App = () => {
     }
   };
 
-  if (user === null) {
-    return (
-      <div>
-        <h2>Log into application</h2>
-        <Notification message={errorMessage} />
-
-        {loginForm()}
-      </div>
-    );
-  }
-
   return (
     <div>
-      <h2>Blogs</h2>
-      <Notification message={errorMessage} />
-
-      {<p>{user.name} logged in</p>}
-
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
-      ))}
+      {user === null ? (
+        <>
+          <h2>Log into application</h2>
+          <Notification message={errorMessage} />
+          {loginForm()}
+        </>
+      ) : (
+        <>
+          <h2>Blogs</h2>
+          <Notification message={errorMessage} />
+          <p>{user.name} logged in</p>
+          {blogs.map((blog) => (
+            <Blog key={blog.id} blog={blog} />
+          ))}
+        </>
+      )}
     </div>
   );
 };
