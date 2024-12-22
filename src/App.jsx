@@ -69,6 +69,13 @@ const App = () => {
     }
   };
 
+  const handleLogout = () => {
+    setUser(null);
+    window.localStorage.removeItem("loggedBlogUser");
+    setErrorMessage("Logged out successfully");
+    setTimeout(() => setErrorMessage(null), 5000);
+  };
+
   return (
     <div>
       {user === null ? (
@@ -81,7 +88,8 @@ const App = () => {
         <>
           <h2>Blogs</h2>
           <Notification message={errorMessage} />
-          <p>{user.name} logged in</p>
+          <p>{user.name} logged in </p>
+          <button onClick={handleLogout}>log out</button>
           {blogs.map((blog) => (
             <Blog key={blog.id} blog={blog} />
           ))}
