@@ -23,6 +23,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
+      blogService.setToken(user.token);
     }
   }, []);
 
@@ -56,7 +57,7 @@ const App = () => {
     <>
       {blogList()}
       <h2>Create new blog</h2>
-      <form onSubmit={handleBlog}>
+      <form onSubmit={handleBlogSubmit}>
         <div>
           title
           <input
@@ -126,17 +127,18 @@ const App = () => {
     }
   };
 
-  const handleBlog = async (event) => {
+  const handleBlogSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const newBlog = await blogService.create({
+      const newBlog = {
         title,
         author,
         url,
-      });
+      };
 
-      setBlog(blogs.concat(newBlog));
+      const createdBlog = await blogService.create(newBlog);
+      setBlog(blogs.concat(createdBlog));
       setTitle("");
       setAuthor("");
       setUrl("");
