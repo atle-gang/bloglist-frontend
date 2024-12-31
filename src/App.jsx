@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import Blog from "./components/Blog";
+import { Blog } from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
-import Notification from "./components/Notification";
+import { Notification } from "./components/Notification";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -12,7 +12,7 @@ const App = () => {
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
   const [user, setUser] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -30,6 +30,7 @@ const App = () => {
   const loginForm = () => (
     <>
       <h2>Log into application</h2>
+      <Notification notification={notification} />
       <form onSubmit={handleLogin}>
         <div>
           username
@@ -93,6 +94,7 @@ const App = () => {
   const blogList = () => {
     return (
       <>
+        <Notification notification={notification} />
         <h2>Blogs</h2>
         <p>
           {user.name} logged in <button onClick={handleLogout}>log out</button>
@@ -119,11 +121,21 @@ const App = () => {
       setUser(user);
       setUsername("");
       setPassword("");
-    } catch (exception) {
-      setErrorMessage("Wrong credentials");
+      setNotification({
+        type: "addNotification",
+        message: `You have successfully logged in`,
+      });
       setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
+        setNotification(null);
+      }, 3000);
+    } catch (exception) {
+      setNotification({
+        type: "errorNotification",
+        message: `Wrong username or password`,
+      });
+      setTimeout(() => {
+        setNotification(null);
+      }, 3000);
     }
   };
 
@@ -138,23 +150,31 @@ const App = () => {
       };
 
       const createdBlog = await blogService.create(newBlog);
-      setBlog(blogs.concat(createdBlog));
+      setBlogs(blogs.concat(createdBlog));
       setTitle("");
       setAuthor("");
       setUrl("");
-    } catch (exception) {
-      setErrorMessage("Error adding blog");
+      setNotification({
+        type: "addNotification",
+        message: `${title} by ${author} has been added`,
+      });
       setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
+        setNotification(null);
+      }, 3000);
+    } catch (error) {
+      setNotification({
+        type: "errorNotification",
+        message: `${error.response.data.error}`,
+      });
+      setTimeout(() => {
+        setNotification(null);
+      }, 3000);
     }
   };
 
   const handleLogout = () => {
     setUser(null);
     window.localStorage.removeItem("loggedBlogUser");
-    setErrorMessage("Logged out successfully");
-    setTimeout(() => setErrorMessage(null), 5000);
   };
 
   return <div>{user === null ? loginForm() : blogForm()}</div>;
