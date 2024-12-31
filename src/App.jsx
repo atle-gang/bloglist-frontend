@@ -12,7 +12,6 @@ const App = () => {
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
   const [user, setUser] = useState(null);
-  const [blog, setBlog] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
@@ -115,6 +114,7 @@ const App = () => {
 
       window.localStorage.setItem("loggedBlogUser", JSON.stringify(user));
 
+      blogService.setToken(user.token);
       setUser(user);
       setUsername("");
       setPassword("");
@@ -130,13 +130,13 @@ const App = () => {
     event.preventDefault();
 
     try {
-      const blog = await loginService.create({
+      const newBlog = await blogService.create({
         title,
         author,
         url,
       });
 
-      setBlog(blog);
+      setBlog(blogs.concat(newBlog));
       setTitle("");
       setAuthor("");
       setUrl("");
