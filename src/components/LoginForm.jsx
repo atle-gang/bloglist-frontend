@@ -1,7 +1,4 @@
 import React from "react";
-import { useState } from "react";
-
-// const [notification, setNotification] = useState(null);
 
 const LoginForm = ({
   handleSubmit,
