@@ -4,6 +4,7 @@ import blogService from "./services/blogs";
 import loginService from "./services/login";
 import { Notification } from "./components/Notification";
 import { LoginForm } from "./components/LoginForm";
+import { Togglable } from "./components/Togglable";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -69,7 +70,7 @@ const App = () => {
             handlePasswordChange={({ target }) => setPassword(target.value)}
             handleSubmit={handleLogin}
           />
-          <button onClick={() => setLoginVisible(true)}>cancel</button>
+          <button onClick={() => setLoginVisible(false)}>cancel</button>
         </div>
       </>
     );
