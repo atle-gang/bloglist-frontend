@@ -81,9 +81,7 @@ const App = () => {
           {user.name} logged in <button onClick={handleLogout}>log out</button>
         </p>
         {blogs.map((blog) => (
-          <Togglable buttonLabel="view">
-            <Blog key={blog.id} blog={blog} />
-          </Togglable>
+          <Blog key={blog.id} blog={blog} />
         ))}
       </>
     );
