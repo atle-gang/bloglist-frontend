@@ -19,7 +19,7 @@ const Blog = ({ blog }) => {
         {blog.title}{" "}
         <button onClick={() => setIsActive(!isActive)}>{buttonLabel}</button>
       </div>
-      {isActive ? (
+      {isActive && (
         <div>
           <p>{blog.url}</p>
           <p>
@@ -28,8 +28,6 @@ const Blog = ({ blog }) => {
           </p>
           <p>{blog.author}</p>
         </div>
-      ) : (
-        ''
       )}
     </div>
   );
