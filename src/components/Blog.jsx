@@ -11,10 +11,13 @@ const Blog = ({ blog }) => {
     marginBottom: 5,
   };
 
+  const buttonLabel = isActive ? "hide" : "view";
+
   return (
     <div style={blogStyle}>
       <div>
-        {blog.title} {blog.author}
+        {blog.title}{" "}
+        <button onClick={() => setIsActive(!isActive)}>{buttonLabel}</button>
       </div>
       {isActive ? (
         <div>
@@ -26,7 +29,7 @@ const Blog = ({ blog }) => {
           <p>{blog.author}</p>
         </div>
       ) : (
-        <button onClick={() => setIsActive(true)}>view</button>
+        ''
       )}
     </div>
   );
