@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { Blog } from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import { Notification } from "./components/Notification";
 import { LoginForm } from "./components/LoginForm";
 import { Togglable } from "./components/Togglable";
 import { BlogForm } from "./components/BlogForm";
+import { BlogList } from "./components/BlogList";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -80,9 +80,10 @@ const App = () => {
         <p>
           {user.name} logged in <button onClick={handleLogout}>log out</button>
         </p>
-        {blogs.map((blog) => (
+        {/* {blogs.map((blog) => (
           <Blog key={blog.id} blog={blog} />
-        ))}
+        ))} */}
+        <BlogList blogs={blogs} saveLikeFunction={saveLike} />
       </>
     );
   };
@@ -156,6 +157,24 @@ const App = () => {
         setNotification(null);
       }, 3000);
     }
+  };
+
+  const saveLike = async (likedBlog) => {
+    await blogService.update(likedBlog.id, likedBlog);
+    blogService
+      .getAll()
+      .then((blogs) => {
+        setBlogs(blogs);
+      })
+      .then(() => {
+        setNotification({
+          type: "addNotification",
+          message: `$You liked ${likedBlog.title}`,
+        });
+        setTimeout(() => {
+          setNotification(null);
+        }, 3000);
+      });
   };
 
   return (
