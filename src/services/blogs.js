@@ -8,8 +8,8 @@ const setToken = (newToken) => {
 };
 
 const getAll = async () => {
-  const request = await axios.get(baseUrl);
-  return request.data;
+  const response = await axios.get(baseUrl);
+  return response.data;
 };
 
 const create = async (newBlog) => {

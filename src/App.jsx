@@ -19,13 +19,31 @@ const App = () => {
   const [loginVisible, setLoginVisible] = useState(false);
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, []);
+    const fetchData = async () => {
+      try {
+        if (user) {
+          // Only fetch blogs if we have a user
+          const blogs = await blogService.getAll();
+          setBlogs(blogs);
+        }
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+      }
+    };
+
+    fetchData();
+  }, [user]); // Add user as a dependency
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogUser");
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
+
+      if (!user.id) {
+        const decodedToken = JSON.parse(atob(user.token.split(".")[1]));
+        user.id = decodedToken.id;
+      }
+
       setUser(user);
       blogService.setToken(user.token);
     }
@@ -83,7 +101,7 @@ const App = () => {
         {/* {blogs.map((blog) => (
           <Blog key={blog.id} blog={blog} />
         ))} */}
-        <BlogList blogs={blogs} saveLikeFunction={saveLike} />
+        <BlogList blogs={blogs} saveLikeFunction={saveLike} user={user} />
       </>
     );
   };
@@ -97,10 +115,19 @@ const App = () => {
         password,
       });
 
-      window.localStorage.setItem("loggedBlogUser", JSON.stringify(user));
+      // Decode the token to get the user ID
+      const decodedToken = JSON.parse(atob(user.token.split(".")[1]));
+
+      // Create a user object with the ID included
+      const userWithId = {
+        ...user,
+        id: decodedToken.id, // Add the ID from the token
+      };
+
+      window.localStorage.setItem("loggedBlogUser", JSON.stringify(userWithId));
 
       blogService.setToken(user.token);
-      setUser(user);
+      setUser(userWithId);
       setUsername("");
       setPassword("");
       setNotification({
@@ -145,6 +172,10 @@ const App = () => {
         type: "addNotification",
         message: `${title} by ${author} has been added`,
       });
+      // Refresh the full blog list after creating a new blog
+      const updatedBlogs = await blogService.getAll();
+      setBlogs(updatedBlogs);
+
       setTimeout(() => {
         setNotification(null);
       }, 3000);

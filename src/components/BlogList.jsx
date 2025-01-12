@@ -1,7 +1,17 @@
 import React from "react";
 import { Blog } from "./Blog";
 
-const BlogList = ({ blogs, saveLikeFunction }) => {
+const BlogList = ({ blogs, saveLikeFunction, user }) => {
+  // Filter blogs to only show those belonging to the current user
+  if (!user || !user.id) {
+    return null;
+  }
+
+  const userBlogs = blogs.filter((blog) => {
+    // Check if the blog's user array contains an object with matching ID
+    return blog.user.some((blogUser) => blogUser.id === user.id);
+  });
+
   const mappingFunction = (blog) => {
     return (
       <Blog key={blog.id} blog={blog} saveLikeFunction={saveLikeFunction} />
@@ -14,8 +24,17 @@ const BlogList = ({ blogs, saveLikeFunction }) => {
     return likes2 - likes1;
   };
 
-  const sortedBlogs = blogs.map(mappingFunction).sort(compareFun);
-  return <div>{sortedBlogs}</div>;
+  const sortedBlogs = userBlogs.map(mappingFunction).sort(compareFun);
+
+  return (
+    <div>
+      {sortedBlogs.length > 0 ? (
+        sortedBlogs
+      ) : (
+        <p>No blogs found. Create your first blog!</p>
+      )}
+    </div>
+  );
 };
 
 export { BlogList };
