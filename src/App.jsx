@@ -169,7 +169,7 @@ const App = () => {
       .then(() => {
         setNotification({
           type: "addNotification",
-          message: `$You liked ${likedBlog.title}`,
+          message: `You liked ${likedBlog.title}`,
         });
         setTimeout(() => {
           setNotification(null);

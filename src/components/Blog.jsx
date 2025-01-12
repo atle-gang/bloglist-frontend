@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BlogDetails } from "./BlogDetails";
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, saveLikeFunction }) => {
   const [isActive, setIsActive] = useState(false);
   const [likes, setLikes] = useState(blog.likes);
   const blogStyle = {
@@ -13,11 +13,21 @@ const Blog = ({ blog }) => {
   };
 
   const buttonLabel = isActive ? "hide" : "view";
-  console.log(likes)
-
-  const saveFunction = () => {
-    setLikes(likes + 1);
-  }
+  
+  const handleLikeClick = async () => {
+    const updatedBlog = {
+      ...blog,
+      likes: likes + 1,
+      user: blog.user.id 
+    };
+    
+    try {
+      await saveLikeFunction(updatedBlog);
+      setLikes(likes + 1);
+    } catch (error) {
+      console.error("Error updating likes:", error);
+    }
+  };
 
   return (
     <div style={blogStyle}>
@@ -28,7 +38,7 @@ const Blog = ({ blog }) => {
       {/* In React, this behavior allows you to conditionally render elements based on the truthiness of an expression. 
       If the expression before && is true, React will evaluate and render the part after &&. If it's false, React will skip rendering entirely. */}
       {isActive && (
-        <BlogDetails blog={blog} likes={likes} setLikes={saveFunction} />
+        <BlogDetails blog={blog} likes={likes} handleLike={handleLikeClick} />
       )}
     </div>
   );

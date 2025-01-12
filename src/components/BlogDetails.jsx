@@ -1,11 +1,11 @@
 import React from "react";
 
-const BlogDetails = ({ blog, likes, setLikes }) => {
+const BlogDetails = ({ blog, likes, handleLike }) => {
   return (
     <div>
       <p>{blog.url}</p>
       <p>
-        likes {likes} <button onClick={() => setLikes(likes + 1)}>like</button>
+        likes {likes} <button onClick={handleLike}>like</button>
       </p>
       <p>{blog.author}</p>
     </div>

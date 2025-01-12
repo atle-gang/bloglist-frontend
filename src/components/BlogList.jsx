@@ -4,7 +4,7 @@ import { Blog } from "./Blog";
 const BlogList = ({ blogs, saveLikeFunction }) => {
   const mappingFunction = (blog) => {
     return (
-      <Blog key={blog.id} blog={blog} />
+      <Blog key={blog.id} blog={blog} saveLikeFunction={saveLikeFunction} />
     );
   };
 
