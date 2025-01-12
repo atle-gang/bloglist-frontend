@@ -208,6 +208,40 @@ const App = () => {
       });
   };
 
+  const deleteBlog = async (id, blogTitle) => {
+    blogTitle = blog.title;
+    const confirmBlogDeletion = window.confirm(
+      `Delete ${blogTitle} from your saved blogs?`
+    );
+
+    if (!confirmBlogDeletion) {
+      return;
+    }
+
+    try {
+      await blogService.deleteEntry(id);
+      setBlogs((previousBlogEntries) =>
+        previousBlogEntries.filter((blog) => blog.id !== id)
+      );
+      setNotification({
+        type: "deleteNotification",
+        message: `Deleted ${blogTitle} from your blogs.`,
+      });
+      setTimeout(() => {
+        setNotification(null);
+      }, 3000);
+    } catch (error) {
+      console.error("Failed to delete blog:", error);
+      setNotification({
+        type: "errorNotification",
+        message: `Error deleting '${blogTitle}': ${error.message}`,
+      });
+      setTimeout(() => {
+        setNotification(null);
+      }, 3000);
+    }
+  };
+
   return (
     <div>
       <Notification notification={notification} />
