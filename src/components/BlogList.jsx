@@ -1,7 +1,7 @@
 import React from "react";
 import { Blog } from "./Blog";
 
-const BlogList = ({ blogs, saveLikeFunction, user }) => {
+const BlogList = ({ blogs, saveLikeFunction, deleteFunction, user }) => {
   // Filter blogs to only show those belonging to the current user
   if (!user || !user.id) {
     return null;
@@ -14,7 +14,12 @@ const BlogList = ({ blogs, saveLikeFunction, user }) => {
 
   const mappingFunction = (blog) => {
     return (
-      <Blog key={blog.id} blog={blog} saveLikeFunction={saveLikeFunction} />
+      <Blog
+        key={blog.id}
+        blog={blog}
+        saveLikeFunction={saveLikeFunction}
+        deleteFunction={() => deleteFunction(blog.id, blog.title)}
+      />
     );
   };
 

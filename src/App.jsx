@@ -101,7 +101,7 @@ const App = () => {
         {/* {blogs.map((blog) => (
           <Blog key={blog.id} blog={blog} />
         ))} */}
-        <BlogList blogs={blogs} saveLikeFunction={saveLike} user={user} />
+        <BlogList blogs={blogs} saveLikeFunction={saveLike} deleteFunction={deleteBlog} user={user} />
       </>
     );
   };
@@ -209,7 +209,6 @@ const App = () => {
   };
 
   const deleteBlog = async (id, blogTitle) => {
-    blogTitle = blog.title;
     const confirmBlogDeletion = window.confirm(
       `Delete ${blogTitle} from your saved blogs?`
     );
