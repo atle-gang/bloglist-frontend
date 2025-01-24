@@ -30,7 +30,7 @@ const Blog = ({ blog, saveLikeFunction, deleteFunction }) => {
   };
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className="blog">
       <div>
         {blog.title}{" "}
         <button onClick={() => setIsActive(!isActive)}>{buttonLabel}</button>
