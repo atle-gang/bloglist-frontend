@@ -33,7 +33,7 @@ const Blog = ({ blog, saveLikeFunction, deleteFunction }) => {
     <div style={blogStyle} className="blog">
       <div>
         {blog.title}{" "}
-        <button onClick={() => setIsActive(!isActive)}>{buttonLabel}</button>
+        <button className="view-button" onClick={() => setIsActive(!isActive)}>{buttonLabel}</button>
       </div>
       {/* In React, this behavior allows you to conditionally render elements based on the truthiness of an expression. 
       If the expression before && is true, React will evaluate and render the part after &&. If it's false, React will skip rendering entirely. */}
