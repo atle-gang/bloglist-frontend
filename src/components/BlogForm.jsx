@@ -10,7 +10,7 @@ const BlogForm = ({
   handleSubmit,
 }) => {
   return (
-    <div>
+    <div className="formDiv">
       <h2>Create new blog</h2>
       <form onSubmit={handleSubmit}>
         <div>
